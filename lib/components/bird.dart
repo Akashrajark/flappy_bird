@@ -14,10 +14,11 @@ class Bird extends SpriteComponent with CollisionCallbacks {
             size: Vector2(birdWidth, birdHeight));
 
   double velocity = 0;
+  bool isUp = false;
 
   @override
   FutureOr<void> onLoad() async {
-    sprite = await Sprite.load('bird.png');
+    sprite = await Sprite.load(isUp ? 'bird_up.png' : 'bird_down.png');
     add(RectangleHitbox());
   }
 
@@ -30,6 +31,9 @@ class Bird extends SpriteComponent with CollisionCallbacks {
     velocity += gravity * dt;
 
     position.y += velocity * dt;
+    if (position.y < 0) {
+      (parent as FlappyBirdGame).gameOver();
+    }
   }
 
   @override
